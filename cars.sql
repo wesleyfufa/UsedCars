@@ -275,3 +275,31 @@ SELECT COUNT(usedCarPosting.state) as carsInCA,AVG(usedCarPosting.price) as avgP
 FROM usedCarPosting,carPrediction
 WHERE usedCarPosting.model = carPrediction.CarName
 AND usedCarPosting.state LIKE '%ca%'
+
+
+CREATE TABLE nameAndTypeOfCar AS
+SELECT model, manufacturer, type
+FROM(
+    SELECT model, manufacturer, type
+    FROM usedCarPosting
+    GROUP BY model, manufacturer, type
+
+    UNION
+
+    SELECT model, Manufacturer as manufacturer, NULL
+    FROM newCarsSold
+    GROUP BY model, manufacturer
+
+    UNION
+
+    SELECT model, brand as manufacturer, NULL
+    FROM usCarData
+    GROUP by model, manufacturer
+
+    UNION
+
+    SELECT Model as model, Brand as manufacturer, BodyStyle as type
+    FROM eletricVehicles
+    GROUP BY model, manufacturer, BodyStyle, type)
+GROUP BY  model, manufacturer, type
+
