@@ -132,21 +132,21 @@ public class queries {
     private void Q3(String ID) {
         try {
             Statement stmt = c.createStatement();
-            Statement stmt1 = c.createStatement();
+            // Statement stmt1 = c.createStatement();
             String sql = "INSERT INTO liked(id, url, region, region_url, price, year, manufacturer, model, condition, cylinderS, fuel, odometer , title_status, transmission, vin, drive,size, type, paint_color, image_url,description, county, state, lat, long, views ) " +
                             "SELECT * " +
                             "FROM usedCarPosting " +
                             "WHERE id = " + ID;
-            String sql1 = "UPDATE usedCarPosting " +
-                            "set views = views + 1 " +
-                            "WHERE id = "+ ID;
+            // String sql1 = "UPDATE usedCarPosting " +
+            //                 "set views = views + 1 " +
+            //                 "WHERE id = "+ ID;
             // PreparedStatement stmt1 = c.prepareStatement(sql1);                 
-            stmt1.execute(sql1);
+            // stmt1.execute(sql1);
             stmt.execute(sql);
             
             c.commit();
             stmt.close();
-            stmt1.close();
+            // stmt1.close();
 
         System.out.println("You Liked a vehicle with ID " + ID);    
 
@@ -285,6 +285,109 @@ public class queries {
             }
         }
 
+    }    
+    private void Q8(String manufacturer1, String model1) {
+        try {
+            String sql =  "SELECT  id, price, year, manufacturer, model " +
+                            "FROM usedCarPosting " +
+                            "WHERE manufacturer = '" + manufacturer1 + "' AND  " +
+                                "model = '"+ model1 + "'" ;
+
+            PreparedStatement stmt = c.prepareStatement(sql);  
+            ResultSet rs = stmt.executeQuery(); 
+            while(rs.next()){
+                String id = rs.getString("id");
+                String price = rs.getString("price");
+                String year = rs.getString("year");
+                String manufacturer = rs.getString("manufacturer");
+                String model = rs.getString("model");
+                System.out.println( " ID: " + id + " Pirce: "+ price +" Year: "+ year +" Manufacturer: "+ manufacturer +" Model: "+ model);
+                System.out.println(" ");
+
+            }
+            c.commit();
+            stmt.close();               
+            rs.close();
+
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            try {
+                c.rollback();
+            } catch (Exception e1) {
+                System.err.println(e1.getClass().getName() + ": " + e1.getMessage());
+            }
+        }
+    }
+    private void viewIncr(String ID){
+        try {
+            Statement stmt1 = c.createStatement();
+            String sql1 = "UPDATE usedCarPosting " +
+                            "set views = views + 1 " +
+                            "WHERE id = "+ ID;            
+            stmt1.execute(sql1);
+            
+            c.commit();
+            stmt1.close();
+            // rs.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            try {
+                c.rollback();
+            } catch (Exception e1) {
+                System.err.println(e1.getClass().getName() + ": " + e1.getMessage());
+            }
+        }
+    }
+        private void detail(String ID) {
+            try {
+                String sql = "SELECT id ,url ,region ,region_url, price, year, manufacturer, model, condition, cylinders, fuel, odometer, title_status, transmission, vin, drive, size, type, paint_color, image_url, description, county, state, lat, long, views "+
+                            "FROM usedCarPosting " +
+                            "WHERE id = " + ID;
+            PreparedStatement stmt = c.prepareStatement(sql);  
+            ResultSet rs = stmt.executeQuery(); 
+            while(rs.next()){
+                String id = rs.getString("id");
+                String url  = rs.getString("url");
+                String region  = rs.getString("region");
+                String region_url = rs.getString("region_url");
+                String price = rs.getString("price");
+                String year = rs.getString("year");
+                String manufacturer = rs.getString("manufacturer");
+                String model = rs.getString("model");
+                String condition = rs.getString("condition");
+                String cylinders = rs.getString("cylinders");
+                String fuel = rs.getString("fuel");
+                String odometer = rs.getString("odometer");
+                String title_status = rs.getString("title_status");
+                String transmission = rs.getString("transmission");
+                String vin = rs.getString("vin");
+                String drive = rs.getString("drive");
+                String size = rs.getString("size");
+                String type = rs.getString("type");
+                String paint_color = rs.getString("paint_color");
+                String image_url = rs.getString("image_url");
+                String description = rs.getString("description");
+                String county = rs.getString("county");
+                String state = rs.getString("state");
+                String lat = rs.getString("lat");
+                String longitute = rs.getString("long");
+                String views = rs.getString("views");
+                System.out.println( id +"|"+ url +"|"+ region +"|"+ region_url +"|"+ price +"|"+ year +"|"+ manufacturer +"|"+ model +"|"+ condition +"|"+ cylinders +"|"+ fuel +"|"+ odometer +"|"+ title_status +"|"+ transmission +"|"+ vin +"|"+ drive +"|"+ size +"|"+ type +"|"+ paint_color +"|"+ image_url +"|"+ description +"|"+ county +"|"+ state +"|"+ lat +"|"+ longitute +"|"+ views );
+                System.out.println(" ");
+
+            }
+            c.commit();
+            stmt.close();              
+            rs.close();
+            } catch (Exception e) {
+                System.err.println(e.getClass().getName() + ": " + e.getMessage());
+                try {
+                    c.rollback();
+                } catch (Exception e1) {
+                    System.err.println(e1.getClass().getName() + ": " + e1.getMessage());
+                }
+            }
+
     }
 
 //works
@@ -300,18 +403,23 @@ public class queries {
             // ResultSet rs = stmt.executeQuery();
 
             while(rs.next()){
-               brand = rs.getString("Brand");
-                String model = rs.getString ("model");
-                String topSpeed = rs.getString("TopSpeed");
-                String Range = rs.getString("Range");
-                String BodyStyle = rs.getString("BodyStyle");
-                String Seats= rs.getString("Seats");
-                String Price= rs.getString("PriceEuro");
-                System.out.println("The Brand "+ brand + "has these stats:");
-                System.out.println("model " + model);
-                System.out.println("TopSpeed " + topSpeed);
-
-            }
+                brand = rs.getString("Brand");
+                 String model = rs.getString ("model");
+                 String topSpeed = rs.getString("TopSpeed");
+                 String Range = rs.getString("Range");
+                 String BodyStyle = rs.getString("BodyStyle");
+                 String Seats= rs.getString("Seats");
+                 String Price= rs.getString("PriceEuro");
+                // System.out.println("The Brand "+ brand + "has these stats:");
+                 System.out.println(" | model " + model);
+                 System.out.println(" | TopSpeed " + topSpeed);
+                 System.out.println(" | Range : " + Range);
+                 System.out.println(" | Body Style: " + BodyStyle);
+                 System.out.println(" | Seats: " + Seats);
+                 System.out.println(" |Price: "  +Price);
+                 System.out.println();
+ 
+             }
             //stmt.execute(sql);
             
             rs.close();
@@ -375,7 +483,7 @@ public class queries {
 
     }
 
-    //not tested yet
+    //works
     private void popularityOfCar(String Manufacturer,String Model){
         try{
             Statement stmt;
@@ -388,7 +496,7 @@ public class queries {
                String sales= rs.getString("Sales_in_thousands");
                //Manufacturer = rs.getString("Manufacturer");
                // Model = rs.getString("Model");
-                System.out.println("Times this MODEL:  has been sold: " + sales);
+                System.out.println("Times this MODEL:  has been sold: " + sales + " (in thousands)");
                 System.out.println();
             }
 
@@ -404,7 +512,7 @@ public class queries {
         }
     }
 
-        //not tested yet 
+        //works
         private void comparingOldNew(String manufacturer,String model){
             try{
                 Statement stmt;
@@ -422,7 +530,7 @@ public class queries {
                     String oldCar = rs.getString("priceOfUsedCar");
                     
                     //System.out.println();
-                    System.out.println("--Here is the comparison of OLD VS NEW--");
+                  //  System.out.println("--Here is the comparison of OLD VS NEW--");
                     System.out.print("NEW CAR COSTS  " + newCar + " | ");
                     System.out.print("| OLD CAR COSTS " + oldCar + " | ");
                     System.out.println();
@@ -440,7 +548,7 @@ public class queries {
             }
         }
 
-           //not tested yet 
+           //works
     private void minPriceForBody(String carBody){ //test using carBody = convertible
         try{
             Statement stmt;
@@ -453,7 +561,7 @@ public class queries {
                 String con= rs.getString("CarName");
                 String price = rs.getString("price");
                 
-                 System.out.println("--Cheapest cars of certain body type--");
+                // System.out.println("--Cheapest cars of certain body type--");
                  System.out.println("BODY: " + con + "MIN PRICE: " + price);
                  System.out.println();
              }
@@ -470,6 +578,79 @@ public class queries {
             }
         }
     }
+    private void carsInAreaPrediction(String area,String a1,String a2,String a3){
+        try{
+            Statement stmt;
+            stmt = c.createStatement();
+            String sql = "SELECT COUNT(usedCarPosting.state) as carsInCA,AVG(usedCarPosting.price) as avgPrice,AVG(carPrediction.price) as avgPredictionPrice " +
+            " FROM usedCarPosting,carPrediction " +
+            " WHERE usedCarPosting.model = carPrediction.CarName " +
+            " AND usedCarPosting.state LIKE'%" + area + "%' " +
+            " AND carPrediction.cylindernumber LIKE'%" + a1 + "%' " + 
+            " AND carPrediction.doornumber LIKE'%" + a2 + "%' " + 
+            " AND carPrediction.horsePower >= " + a3 +  "" ;
+
+            ResultSet rs =stmt.executeQuery(sql);
+
+            while(rs.next()){
+                String carsInArea = rs.getString("carsInCA");
+                String avgPrice = rs.getString("avgPrice");
+                String avgPredictionPrice = rs.getString("avgPredictionPrice");
+
+                System.out.println("# of cars in " + area + ": " + carsInArea + "| ");
+                System.out.println(" AVG price of cars: " + avgPrice + "|");
+                System.out.println("Predicted price of cars: " + avgPredictionPrice + "|"); 
+                System.out.println();
+            }   
+
+        }
+
+        catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            try {
+                c.rollback();
+            } catch (Exception e1) {
+                System.err.println(e1.getClass().getName() + ": " + e1.getMessage());
+            }
+        }
+
+    }
+
+
+    private void carsInAreaAtt(String year, String brand , String state){
+        try{
+         Statement stmt;
+         stmt = c.createStatement();
+         String sql = "SELECT AVG(price) as avgPrice, brand, model,year " +
+         " FROM usCarData WHERE year >= "+ year + " AND brand LIKE '%" + brand +"%' " + 
+         " AND state LIKE'%"+ state +"%' GROUP BY model";
+         ResultSet rs =stmt.executeQuery(sql);
+ 
+         while(rs.next()){
+             String avgPrice = rs.getString("avgPrice");
+             String brands= rs.getString("brand");
+             String model = rs.getString("model");
+             String yr =rs.getString("year");
+             // System.out.println("---- Searching in " + state + " ----");
+             System.out.println("Avg Price " + avgPrice + " | Brand " + brands + " | Model " + model + " |Year "+ yr );
+             System.out.println();
+ 
+ 
+ 
+         }
+ 
+        }
+ 
+        catch (Exception e) {
+         System.err.println(e.getClass().getName() + ": " + e.getMessage());
+         try {
+             c.rollback();
+         } catch (Exception e1) {
+             System.err.println(e1.getClass().getName() + ": " + e1.getMessage());
+         }
+     }
+ 
+     }
 
 
 
@@ -482,18 +663,19 @@ public class queries {
         queries sj = new queries();
         sj.openConnection("data/data.sqlite");
         
-
         System.out.println("What would you like to do?");		
         System.out.println("1. A Buyer who wants to buy a used vehicle");
         System.out.println("2. A Seller who wants to sell a used vehicle");
-        System.out.println("3. Like a vehcile");
-        System.out.println("4. Unlike a vehcile");
-        System.out.println("5. View all your liked cars");
-        System.out.println("6. Check how many people have viewed your posting");
-        System.out.println("7. Go to the webPage of the car you have selected");
-        System.out.println("10. SEE Electric Cars");
-        System.out.println("11. SEE NEW Cars");
-        System.out.println("12. Find cheapest car given type");
+        System.out.println("3. Do you have a manufactuer and model in mind?");
+        System.out.println("4. Like a vehcile");
+        System.out.println("5. Unlike a vehcile");
+        System.out.println("6. View all your liked cars");
+        System.out.println("7. Check how many people have viewed your posting");
+        System.out.println("8. Go to the webPage of the car you have selected");
+        System.out.println("9. SEE Electric Cars");
+        System.out.println("10. SEE NEW Cars");
+        System.out.println("11. Find cheapest car given type");
+        System.out.println("12. Look for cars in my area");
         System.out.println("0. To quit");
         int userInput = scan.nextInt();
 
@@ -557,32 +739,53 @@ public class queries {
                 sj.Q2(ID, url, region, regionUrl, price, year, manufacturer, model, condition, cylinders, fuel, odometer, titleStatus, transmission, vin, drive, size, type, color, imageUrl, county, state, latitude, longitue);
                 System.out.println("Select another option or press 0 to quit");
             }else if(userInput == 3){
+                System.out.println("Enter the manufacterur");
+                String var = scan.next();
+                System.out.println("Enter the model");
+                String var1 = scan.next();
+                sj.Q8(var,var1);
+                System.out.println("Do you want view a car in more detail, 1.yes or 2.no");
+                int num = scan.nextInt();
+                if(num == 1){
+                    System.out.println("Enter the vehicle's ID");
+                    String var2 = scan.next();
+                    sj.detail(var2);
+                    sj.viewIncr(var2);
+                    System.out.println("Select another option or press 0 to quit");
+                }else{
+                    System.out.println("Select another option or press 0 to quit");
+                }
+            }
+            else if(userInput == 4){
                 System.out.println("Enter ID of the vehicle you wish to like and save");
                 String var1 = scan.next();
                 sj.Q3(var1);
+                sj.viewIncr(var1);
                 System.out.println("Select another option or press 0 to quit");
-            }else if(userInput == 4){
+            }else if(userInput == 5){
                 System.out.println("Enter ID of the vehicle you wish to unlike and unsave");
                 String var2 = scan.next();
                 sj.Q4(var2);
                 System.out.println("Select another option or press 0 to quit");
-            }else if(userInput == 5){
+            }else if(userInput == 6){
                 sj.Q5();
                 System.out.println("Select another option or press 0 to quit");
-            }else if (userInput == 6){
+            }else if (userInput == 7){
                 System.out.println("Enter ID of your posting to see how many people have viewed your post");
                 String var1 = scan.next();
                 sj.Q6(var1);
-            }else if (userInput == 7){
+                System.out.println("Select another option or press 0 to quit");
+            }else if (userInput == 8){
                 System.out.println("Enter ID of the posting to go to the website");
                 String var = scan.next();
                 sj.Q7(var);
                 System.out.println("Select another option or press 0 to quit");
-            }else if(userInput == 10){
+            }else if(userInput == 9){
                 System.out.println("What brand do you want");
                 String var = scan.next();
                 sj.evStats(var);
-            }else if(userInput == 11){
+                System.out.println("Select another option or press 0 to quit");
+            }else if(userInput == 10){
                 System.out.println("ENTER MANUFACTURER: ");
                 String man = scan.next();
                 System.out.println("ENTER MODEL: ");
@@ -603,12 +806,42 @@ public class queries {
                 }
             System.out.println("Select another option or press 0 to quit");
 
-            }else if(userInput ==12){
+            }else if(userInput ==11){
                 System.out.println("What type do u want i.e seda,hatchback,wagon");
                 String type = scan.next();
 
                 sj.minPriceForBody(type);
             System.out.println("Select another option or press 0 to quit");
+            }else if(userInput ==12){
+                System.out.println("Do you want to find a prediction of car price? ");
+                System.out.println("1 yes . 2 No");
+                int ans = scan.nextInt();
+                
+                if(ans == 1){
+                    System.out.println("What area do you wanna search");
+                    String area = scan.next();
+                    System.out.println("How many cylinders? "); 
+                    String cyl = scan.next(); //put four, four cylinders, input has to be cylinder number
+                    System.out.println("How many doors? "); 
+                     String doors = scan.next();
+                     System.out.println("How much horsePower ? ");
+                     String pow =  scan.next();
+                    sj.carsInAreaPrediction(area,cyl,doors,pow);
+                    }
+                
+                else if (ans == 2){
+                    System.out.println("What area do you wanna search");
+                    String area = scan.next();
+                    System.out.println(" What brand ");
+                    String brand = scan.next();
+                    System.out.println("What year ");
+                    String yr = scan.next();
+
+                    sj.carsInAreaAtt(yr,brand,area);
+
+
+                }
+                System.out.println("Select another option or press 0 to quit");
             }
 
 
